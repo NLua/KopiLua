@@ -1,6 +1,6 @@
 #ignore thumbnails created by windows
 Thumbs.db
-#Ignore files built by Visual Studio
+# Ignore files build by Visual Studio
 *.obj
 *.exe
 *.pdb
@@ -18,7 +18,7 @@ Thumbs.db
 *.cache
 *.ilk
 *.log
-[Bb]in/
+[Bb]in
 [Dd]ebug*/
 *.lib
 *.sbr
@@ -26,6 +26,26 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
+UpgradeLog.XML
+UpgradeLog.htm
+*.ReSharper
+*.userprefs
 
 #Other files
 KopiLua.htm
+
+# http://www.gnu.org/software/automake
+
+Makefile
+Makefile.in
+
+# http://www.gnu.org/software/autoconf
+
+/autom4te.cache
+/aclocal.m4
+/compile
+/configure
+/depcomp
+/install-sh
+/missing
+/config.status
