@@ -18,6 +18,31 @@ namespace KopiLua
 	[CLSCompliantAttribute(true)]
 	public partial class Lua
 	{
+		private static bool RunningOnUnix
+		{
+			get {
+				var platform = (int)Environment.OSVersion.Platform;
+
+				return (platform == 4) || (platform == 6) || (platform == 128);
+			}
+		}
+
+		static Lua()
+		{
+			if (RunningOnUnix) {
+				LUA_ROOT = UNIX_LUA_ROOT;
+				LUA_LDIR = UNIX_LUA_LDIR;
+				LUA_CDIR = UNIX_LUA_CDIR;
+				LUA_PATH_DEFAULT = UNIX_LUA_PATH_DEFAULT;
+				LUA_CPATH_DEFAULT = UNIX_LUA_CPATH_DEFAULT;
+			} else {
+				LUA_ROOT = null;
+				LUA_LDIR = WIN32_LUA_LDIR;
+				LUA_CDIR = WIN32_LUA_CDIR;
+				LUA_PATH_DEFAULT = WIN32_LUA_PATH_DEFAULT;
+				LUA_CPATH_DEFAULT = WIN32_LUA_CPATH_DEFAULT;
+			}
+		}
 
 		public const string LUA_VERSION = "Lua 5.1";
 		public const string LUA_RELEASE = "Lua 5.1.5";

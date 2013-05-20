@@ -91,29 +91,35 @@ namespace KopiLua
 		** hierarchy or if you want to install your libraries in
 		** non-conventional directories.
 		*/
-		#if _WIN32
+		public static readonly string LUA_ROOT;
+		public static readonly string LUA_LDIR;
+		public static readonly string LUA_CDIR;
+		public static readonly string LUA_PATH_DEFAULT;
+		public static readonly string LUA_CPATH_DEFAULT;
+
+		//#if _WIN32
 		/*
 		** In Windows, any exclamation mark ('!') in the path is replaced by the
 		** path of the directory of the executable file of the current process.
 		*/
-		public const string LUA_LDIR = "!\\lua\\";
-		public const string LUA_CDIR = "!\\";
-		public const string LUA_PATH_DEFAULT =
-				".\\?.lua;"  + LUA_LDIR + "?.lua;"  + LUA_LDIR + "?\\init.lua;"
-							 + LUA_CDIR + "?.lua;"  + LUA_CDIR + "?\\init.lua";
-		public const string LUA_CPATH_DEFAULT =
-			".\\?.dll;"  + LUA_CDIR + "?.dll;" + LUA_CDIR + "loadall.dll";
+		private const string WIN32_LUA_LDIR = "!\\lua\\";
+		private const string WIN32_LUA_CDIR = "!\\";
+		private const string WIN32_LUA_PATH_DEFAULT =
+				".\\?.lua;"  + WIN32_LUA_LDIR + "?.lua;"  + WIN32_LUA_LDIR + "?\\init.lua;"
+							 + WIN32_LUA_CDIR + "?.lua;"  + WIN32_LUA_CDIR + "?\\init.lua";
+		private const string WIN32_LUA_CPATH_DEFAULT =
+			".\\?.dll;"  + WIN32_LUA_CDIR + "?.dll;" + WIN32_LUA_CDIR + "loadall.dll";
 
-		#else
-		public const string LUA_ROOT	= "/usr/local/";
-		public const string LUA_LDIR	= LUA_ROOT + "share/lua/5.1/";
-		public const string LUA_CDIR	= LUA_ROOT + "lib/lua/5.1/";
-		public const string LUA_PATH_DEFAULT  =
-				"./?.lua;"  + LUA_LDIR + "?.lua;"  + LUA_LDIR + "?/init.lua;" +
-							LUA_CDIR + "?.lua;"  + LUA_CDIR + "?/init.lua";
-		public const string LUA_CPATH_DEFAULT =
-			"./?.so;"  + LUA_CDIR + "?.so;" + LUA_CDIR + "loadall.so";
-#endif
+		//#else
+		private const string UNIX_LUA_ROOT	= "/usr/local/";
+		private const string UNIX_LUA_LDIR	= UNIX_LUA_ROOT + "share/lua/5.1/";
+		private const string UNIX_LUA_CDIR	= UNIX_LUA_ROOT + "lib/lua/5.1/";
+		private const string UNIX_LUA_PATH_DEFAULT  =
+				"./?.lua;"  + UNIX_LUA_LDIR + "?.lua;"  + UNIX_LUA_LDIR + "?/init.lua;" +
+							UNIX_LUA_CDIR + "?.lua;"  + UNIX_LUA_CDIR + "?/init.lua";
+		private const string UNIX_LUA_CPATH_DEFAULT =
+			"./?.so;"  + UNIX_LUA_CDIR + "?.so;" + UNIX_LUA_CDIR + "loadall.so";
+		//#endif
 
 
 		/*
@@ -121,11 +127,7 @@ namespace KopiLua
 		** CHANGE it if your machine does not use "/" as the directory separator
 		** and is not Windows. (On Windows Lua automatically uses "\".)
 		*/
-		#if _WIN32
-		public const string LUA_DIRSEP = "\\";
-		#else
-		public const string LUA_DIRSEP = "/";
-#endif
+		public static readonly string LUA_DIRSEP = Path.DirectorySeparatorChar.ToString();
 
 
 		/*
