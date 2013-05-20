@@ -22,7 +22,7 @@ KopiLua
  Professional. In order for Kopi Lua to successfully compile the following
  conditional compilation symbols must be defined in the project settings:
   
- LUA_CORE;_WIN32;LUA_COMPAT_VARARG;LUA_COMPAT_MOD;LUA_COMPAT_GFIND;CATCH_EXCEPTIONS
+ LUA_CORE;LUA_COMPAT_VARARG;LUA_COMPAT_MOD;LUA_COMPAT_GFIND;CATCH_EXCEPTIONS
   
  * Contact/Bug Reports etc
  -------------------------
