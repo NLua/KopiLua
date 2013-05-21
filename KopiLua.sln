@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KopiLua", "KopiLua.csproj", "{E8DDBC21-EF74-4ABA-9C49-BFC702BE25D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KopiLua", "KopiLua\KopiLua.csproj", "{E8DDBC21-EF74-4ABA-9C49-BFC702BE25D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lua", "Lua.csproj", "{1F39043F-11B4-4202-9B0A-6606FA7BB355}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lua", "Lua\Lua.csproj", "{1F39043F-11B4-4202-9B0A-6606FA7BB355}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luac", "Luac.csproj", "{6962DD1F-A32D-4827-B5C5-DB1742CB4D48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luac", "Luac\Luac.csproj", "{6962DD1F-A32D-4827-B5C5-DB1742CB4D48}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KopiLua.Tests", "KopiLua.Tests\KopiLua.Tests.csproj", "{9C7932E8-A045-4AE4-A3B4-9F4C44511087}"
 EndProject

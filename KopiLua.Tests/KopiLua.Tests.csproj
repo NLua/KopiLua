@@ -59,7 +59,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KopiLua.csproj">
+    <ProjectReference Include="..\KopiLua\KopiLua.csproj">
       <Project>{E8DDBC21-EF74-4ABA-9C49-BFC702BE25D8}</Project>
       <Name>KopiLua</Name>
     </ProjectReference>

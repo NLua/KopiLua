@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6962DD1F-A32D-4827-B5C5-DB1742CB4D48}</ProjectGuid>
+    <ProjectGuid>{1F39043F-11B4-4202-9B0A-6606FA7BB355}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Luac</RootNamespace>
-    <AssemblyName>Luac</AssemblyName>
+    <RootNamespace>Lua</RootNamespace>
+    <AssemblyName>Lua</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -36,7 +36,7 @@
     <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Bin\Debug</OutputPath>
     <DefineConstants>TRACE;DEBUG;LUA_CORE;_WIN32;LUA_COMPAT_VARARG;LUA_COMPAT_MOD;LUA_COMPAT_GFIND;CATCH_EXCEPTIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -45,13 +45,14 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>True</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\Bin\Release</OutputPath>
     <DefineConstants>TRACE;LUA_CORE;_WIN32;LUA_COMPAT_VARARG;LUA_COMPAT_MOD;LUA_COMPAT_GFIND;CATCH_EXCEPTIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accessibility" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -59,43 +60,45 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="luac.cs" />
-    <Compile Include="Properties\AssemblyInfo_Luac.cs" />
-    <Compile Include="src\lapi.cs" />
-    <Compile Include="src\lauxlib.cs" />
-    <Compile Include="src\lbaselib.cs" />
-    <Compile Include="src\lcode.cs" />
-    <Compile Include="src\ldblib.cs" />
-    <Compile Include="src\ldebug.cs" />
-    <Compile Include="src\ldo.cs" />
-    <Compile Include="src\ldump.cs" />
-    <Compile Include="src\lfunc.cs" />
-    <Compile Include="src\lgc.cs" />
-    <Compile Include="src\linit.cs" />
-    <Compile Include="src\liolib.cs" />
-    <Compile Include="src\llex.cs" />
-    <Compile Include="src\llimits.cs" />
-    <Compile Include="src\lmathlib.cs" />
-    <Compile Include="src\lmem.cs" />
-    <Compile Include="src\loadlib.cs" />
-    <Compile Include="src\lobject.cs" />
-    <Compile Include="src\lopcodes.cs" />
-    <Compile Include="src\loslib.cs" />
-    <Compile Include="src\lparser.cs" />
-    <Compile Include="src\lstate.cs" />
-    <Compile Include="src\lstring.cs" />
-    <Compile Include="src\lstrlib.cs" />
-    <Compile Include="src\ltable.cs" />
-    <Compile Include="src\ltablib.cs" />
-    <Compile Include="src\ltm.cs" />
-    <Compile Include="src\lua.cs" />
-    <Compile Include="src\luaconf.cs" />
-    <Compile Include="src\lualib.cs" />
-    <Compile Include="src\lundump.cs" />
-    <Compile Include="src\lvm.cs" />
-    <Compile Include="src\lzio.cs" />
-    <Compile Include="src\print.cs" />
-    <Compile Include="src\printf\Tools.cs" />
+    <Compile Include="lua.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\KopiLua\src\lapi.cs" />
+    <Compile Include="..\KopiLua\src\lauxlib.cs" />
+    <Compile Include="..\KopiLua\src\lbaselib.cs" />
+    <Compile Include="..\KopiLua\src\lcode.cs" />
+    <Compile Include="..\KopiLua\src\ldblib.cs" />
+    <Compile Include="..\KopiLua\src\ldebug.cs" />
+    <Compile Include="..\KopiLua\src\ldo.cs" />
+    <Compile Include="..\KopiLua\src\ldump.cs" />
+    <Compile Include="..\KopiLua\src\lfunc.cs" />
+    <Compile Include="..\KopiLua\src\lgc.cs" />
+    <Compile Include="..\KopiLua\src\linit.cs" />
+    <Compile Include="..\KopiLua\src\liolib.cs" />
+    <Compile Include="..\KopiLua\src\llex.cs" />
+    <Compile Include="..\KopiLua\src\llimits.cs" />
+    <Compile Include="..\KopiLua\src\lmathlib.cs" />
+    <Compile Include="..\KopiLua\src\lmem.cs" />
+    <Compile Include="..\KopiLua\src\loadlib.cs" />
+    <Compile Include="..\KopiLua\src\lobject.cs" />
+    <Compile Include="..\KopiLua\src\lopcodes.cs" />
+    <Compile Include="..\KopiLua\src\loslib.cs" />
+    <Compile Include="..\KopiLua\src\lparser.cs" />
+    <Compile Include="..\KopiLua\src\lstate.cs" />
+    <Compile Include="..\KopiLua\src\lstring.cs" />
+    <Compile Include="..\KopiLua\src\lstrlib.cs" />
+    <Compile Include="..\KopiLua\src\ltable.cs" />
+    <Compile Include="..\KopiLua\src\ltablib.cs" />
+    <Compile Include="..\KopiLua\src\ltm.cs" />
+    <Compile Include="..\KopiLua\src\lua.cs" />
+    <Compile Include="..\KopiLua\src\luaconf.cs" />
+    <Compile Include="..\KopiLua\src\lualib.cs" />
+    <Compile Include="..\KopiLua\src\lundump.cs" />
+    <Compile Include="..\KopiLua\src\lvm.cs" />
+    <Compile Include="..\KopiLua\src\lzio.cs" />
+    <Compile Include="..\KopiLua\src\print.cs" />
+    <Compile Include="..\KopiLua\src\printf\Tools.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
