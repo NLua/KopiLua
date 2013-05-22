@@ -66,6 +66,7 @@
     <Compile Include="src\llimits.cs" />
     <Compile Include="src\lmathlib.cs" />
     <Compile Include="src\lmem.cs" />
+    <Compile Include="src\lnet.cs" />
     <Compile Include="src\loadlib.cs" />
     <Compile Include="src\lobject.cs" />
     <Compile Include="src\lopcodes.cs" />
