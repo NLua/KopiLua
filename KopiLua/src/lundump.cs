@@ -57,25 +57,78 @@ namespace KopiLua
 
 		public static object LoadMem(LoadState S, Type t)
 		{
-			int size = Marshal.SizeOf(t);
+#if SILVERLIGHT
+			// No support for Marshal.SizeOf in Silverlight, so we
+			// have to manually set the size. Size values are from
+			// Lua's 5.1 spec.
+			int size = 0;
+			if (t.Equals(typeof(UInt32)))
+			{
+				size = 4;
+			}
+			else if (t.Equals(typeof(Int32)))
+			{
+				size = 4;
+			}
+			else if (t.Equals(typeof(Char)))
+			{
+				size = 1;
+			}
+			else if (t.Equals(typeof(Byte)))
+			{
+				size = 1;
+			}
+			else if (t.Equals(typeof(Double)))
+			{
+				size = 8;
+			}
+#else
+            int size = Marshal.SizeOf(t);
+#endif
 			CharPtr str = new char[size];
 			LoadBlock(S, str, size);
 			byte[] bytes = new byte[str.chars.Length];
 			for (int i = 0; i < str.chars.Length; i++)
 				bytes[i] = (byte)str.chars[i];
+#if SILVERLIGHT
+			// No support for Marshal.PtrToStructure in Silverlight,
+			// let's use BitConverter instead!
+			object b = null;
+			if (t.Equals(typeof(UInt32)))
+			{
+				b = (UInt32)BitConverter.ToUInt32(bytes, 0);
+			}
+			else if (t.Equals(typeof(Int32)))
+			{
+				b = (Int32)BitConverter.ToInt32(bytes, 0);
+			}
+			else if (t.Equals(typeof(Char)))
+			{
+				b = (Char)bytes[0];
+			}
+			else if (t.Equals(typeof(Byte)))
+			{
+				b = (Byte)bytes[0];
+			}
+			else if (t.Equals(typeof(Double)))
+			{
+				b = (Double)BitConverter.ToDouble(bytes, 0);
+			}
+#else
 			GCHandle pinnedPacket = GCHandle.Alloc(bytes, GCHandleType.Pinned);
 			object b = Marshal.PtrToStructure(pinnedPacket.AddrOfPinnedObject(), t);
 			pinnedPacket.Free();
+#endif
 			return b;
 		}
 
 		public static object LoadMem(LoadState S, Type t, int n)
 		{
 #if SILVERLIGHT
-            List<object> array = new List<object>();
-            for (int i = 0; i < n; i++)
-                array.Add(LoadMem(S, t));
-            return array.ToArray();
+			Array array = Array.CreateInstance(t, n);
+			for (int i = 0; i < n; i++)
+				array.SetValue(LoadMem(S, t), i);
+			return array;
 #else
 			ArrayList array = new ArrayList();
 			for (int i=0; i<n; i++)
