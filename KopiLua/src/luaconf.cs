@@ -1054,6 +1054,7 @@ namespace KopiLua
 
 			public static implicit operator CharPtr(string str) { return new CharPtr(str); }
 			public static implicit operator CharPtr(char[] chars) { return new CharPtr(chars); }
+			public static implicit operator CharPtr(byte[] bytes) { return new CharPtr(bytes); }
 
 			public CharPtr()
 			{
@@ -1089,6 +1090,17 @@ namespace KopiLua
 			{
 				this.chars = chars;
 				this.index = index;
+			}
+
+			public CharPtr(byte[] bytes)
+			{
+				this.chars = new char[bytes.Length];
+				for (int i = 0; i < bytes.Length; i++)
+				{
+					this.chars[i] = (char)bytes[i];
+				}
+
+				this.index = 0;
 			}
 
 			public CharPtr(IntPtr ptr)
