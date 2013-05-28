@@ -170,30 +170,296 @@ namespace KopiLua
 			setboolfield(L, "isdst", stm.IsDaylightSavingTime() ? 1 : 0);
 		  }
 		  else {
-			  luaL_error(L, "strftime not implemented yet"); // todo: implement this - mjf
-#if false
 			CharPtr cc = new char[3];
-			luaL_Buffer b;
+			luaL_Buffer b = new luaL_Buffer();
 			cc[0] = '%'; cc[2] = '\0';
 			luaL_buffinit(L, b);
 			for (; s[0] != 0; s.inc()) {
 			  if (s[0] != '%' || s[1] == '\0')  /* no conversion specifier? */
-				luaL_addchar(b, s[0]);
+			    luaL_addchar(b, s[0]);
 			  else {
-				uint reslen;
-				CharPtr buff = new char[200];  /* should be big enough for any conversion result */
-				s.inc();
-				cc[1] = s[0];
-				reslen = strftime(buff, buff.Length, cc, stm);
-				luaL_addlstring(b, buff, reslen);
+			    uint reslen;
+			    CharPtr buff = new char[200];  /* should be big enough for any conversion result */
+			    s.inc();
+			    cc[1] = s[0];
+			    reslen = strftime(buff, (uint)buff.chars.Length, cc, stm);
+			    buff.index = 0;
+			    luaL_addlstring(b, buff, reslen);
 			  }
 			}
 			luaL_pushresult(b);
-#endif // #if 0
 		  }
 			return 1;
 		}
 
+		#region strftime c# implementation
+		
+		// This strftime implementation has been made following the
+		// Sanos OS open-source strftime.c implementation at
+		// http://www.jbox.dk/sanos/source/lib/strftime.c.html
+		
+		private static uint strftime(CharPtr s, uint maxsize, CharPtr format, DateTime t)
+		{
+			int sIndex = s.index;
+
+			CharPtr p = strftime_fmt((format as object) == null ? "%c" : format, t, s, s.add((int)maxsize));
+			if (p == s + maxsize) return 0;
+			p[0] = '\0';
+
+			return (uint)Math.Abs(s.index - sIndex);
+		}
+
+		private static CharPtr strftime_fmt(CharPtr baseFormat, DateTime t, CharPtr pt, CharPtr ptlim)
+		{
+			CharPtr format = new CharPtr(baseFormat);
+
+			for (; format[0] != 0; format.inc())
+			{
+
+				if (format == '%')
+				{
+
+					format.inc();
+
+					if (format == 'E')
+					{
+						format.inc(); // Alternate Era is ignored
+					}
+					else if (format == 'O')
+					{
+						format.inc(); // Alternate numeric symbols is ignored
+					}
+
+					switch (format[0])
+					{
+						case '\0':
+							format.dec();
+							break;
+
+						case 'A': // Full day of week
+							//pt = _add((t->tm_wday < 0 || t->tm_wday > 6) ? "?" : _days[t->tm_wday], pt, ptlim);
+							pt = strftime_add(t.ToString("dddd"), pt, ptlim);
+							continue;
+
+						case 'a': // Abbreviated day of week
+							//pt = _add((t->tm_wday < 0 || t->tm_wday > 6) ? "?" : _days_abbrev[t->tm_wday], pt, ptlim);
+							pt = strftime_add(t.ToString("ddd"), pt, ptlim);
+							continue;
+
+						case 'B': // Full month name
+							//pt = _add((t->tm_mon < 0 || t->tm_mon > 11) ? "?" : _months[t->tm_mon], pt, ptlim);
+							pt = strftime_add(t.ToString("MMMM"), pt, ptlim);
+							continue;
+
+						case 'b': // Abbreviated month name
+						case 'h': // Abbreviated month name
+							//pt = _add((t->tm_mon < 0 || t->tm_mon > 11) ? "?" : _months_abbrev[t->tm_mon], pt, ptlim);
+							pt = strftime_add(t.ToString("MMM"), pt, ptlim);
+							continue;
+
+						case 'C': // First two digits of year (a.k.a. Year divided by 100 and truncated to integer (00-99))
+							//pt = _conv((t->tm_year + TM_YEAR_BASE) / 100, "%02d", pt, ptlim);
+							pt = strftime_add(t.ToString("yyyy").Substring(0, 2), pt, ptlim);
+							continue;
+
+						case 'c': // Abbreviated date/time representation (e.g. Thu Aug 23 14:55:02 2001)
+							pt = strftime_fmt("%a %b %e %H:%M:%S %Y", t, pt, ptlim);
+							continue;
+
+						case 'D': // Short MM/DD/YY date
+							pt = strftime_fmt("%m/%d/%y", t, pt, ptlim);
+							continue;
+
+						case 'd': // Day of the month, zero-padded (01-31)
+							//pt = _conv(t->tm_mday, "%02d", pt, ptlim);
+							pt = strftime_add(t.ToString("dd"), pt, ptlim);
+							continue;
+
+						case 'e': // Day of the month, space-padded ( 1-31)
+							//pt = _conv(t->tm_mday, "%2d", pt, ptlim);
+							pt = strftime_add(t.Day.ToString().PadLeft(2, ' '), pt, ptlim);
+							continue;
+
+						case 'F': // Short YYYY-MM-DD date
+							pt = strftime_fmt("%Y-%m-%d", t, pt, ptlim);
+							continue;
+
+						case 'H': // Hour in 24h format (00-23)
+							//pt = _conv(t->tm_hour, "%02d", pt, ptlim);
+							pt = strftime_add(t.ToString("HH"), pt, ptlim);
+							continue;
+
+						case 'I': // Hour in 12h format (01-12)
+							//pt = _conv((t->tm_hour % 12) ? (t->tm_hour % 12) : 12, "%02d", pt, ptlim);
+							pt = strftime_add(t.ToString("hh"), pt, ptlim);
+							continue;
+
+						case 'j': // Day of the year (001-366)
+							pt = strftime_add(t.DayOfYear.ToString().PadLeft(3, ' '), pt, ptlim);
+							continue;
+
+						case 'k': // (Non-standard) // Hours in 24h format, space-padded ( 1-23)
+							//pt = _conv(t->tm_hour, "%2d", pt, ptlim);
+							pt = strftime_add(t.ToString("%H").PadLeft(2, ' '), pt, ptlim);
+							continue;
+
+						case 'l': // (Non-standard) // Hours in 12h format, space-padded ( 1-12)
+							//pt = _conv((t->tm_hour % 12) ? (t->tm_hour % 12) : 12, "%2d", pt, ptlim);
+							pt = strftime_add(t.ToString("%h").PadLeft(2, ' '), pt, ptlim);
+							continue;
+
+						case 'M': // Minute (00-59)
+							//pt = _conv(t->tm_min, "%02d", pt, ptlim);
+							pt = strftime_add(t.ToString("mm"), pt, ptlim);
+							continue;
+
+						case 'm': // Month as a decimal number (01-12)
+							//pt = _conv(t->tm_mon + 1, "%02d", pt, ptlim);
+							pt = strftime_add(t.ToString("MM"), pt, ptlim);
+							continue;
+
+						case 'n': // New-line character.
+							pt = strftime_add(Environment.NewLine, pt, ptlim);
+							continue;
+
+						case 'p': // AM or PM designation (locale dependent).
+							//pt = _add((t->tm_hour >= 12) ? "pm" : "am", pt, ptlim);
+							pt = strftime_add(t.ToString("tt"), pt, ptlim);
+							continue;
+
+						case 'R': // 24-hour HH:MM time, equivalent to %H:%M
+							pt = strftime_fmt("%H:%M", t, pt, ptlim);
+							continue;
+
+						case 'r': // 12-hour clock time (locale dependent).
+							pt = strftime_fmt("%I:%M:%S %p", t, pt, ptlim);
+							continue;
+
+						case 'S': // Second ((00-59)
+							//pt = _conv(t->tm_sec, "%02d", pt, ptlim);
+							pt = strftime_add(t.ToString("ss"), pt, ptlim);
+							continue;
+
+						case 'T': // ISO 8601 time format (HH:MM:SS), equivalent to %H:%M:%S
+							pt = strftime_fmt("%H:%M:%S", t, pt, ptlim);
+							continue;
+
+						case 't': // Horizontal-tab character
+							pt = strftime_add("\t", pt, ptlim);
+							continue;
+
+						case 'U': // Week number with the first Sunday as the first day of week one (00-53)
+							//pt = _conv((t->tm_yday + 7 - t->tm_wday) / 7, "%02d", pt, ptlim);
+							pt = strftime_add(System.Globalization.CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(t, System.Globalization.CalendarWeekRule.FirstFullWeek, DayOfWeek.Sunday).ToString(), pt, ptlim);
+							continue;
+
+						case 'u': // ISO 8601 weekday as number with Monday as 1 (1-7) (locale independant).
+							//pt = _conv((t->tm_wday == 0) ? 7 : t->tm_wday, "%d", pt, ptlim);
+							pt = strftime_add(t.DayOfWeek == DayOfWeek.Sunday ? "7" : ((int)t.DayOfWeek).ToString(), pt, ptlim);
+							continue;
+
+						case 'G':   // ISO 8601 year (four digits)
+						case 'g':  // ISO 8601 year (two digits)
+						case 'V':   // ISO 8601 week number
+							// See http://stackoverflow.com/questions/11154673/get-the-correct-week-number-of-a-given-date
+							DateTime isoTime = t;
+							DayOfWeek day = System.Globalization.CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(isoTime);
+							if (day >= DayOfWeek.Monday && day <= DayOfWeek.Wednesday)
+							{
+								isoTime = isoTime.AddDays(3);
+							}
+
+							if (format[0] == 'V') // ISO 8601 week number
+							{
+								int isoWeek = System.Globalization.CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(isoTime, System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+								pt = strftime_add(isoWeek.ToString(), pt, ptlim);
+							}
+							else
+							{
+								string isoYear = System.Globalization.CultureInfo.InvariantCulture.Calendar.GetYear(isoTime).ToString(); // ISO 8601 year (four digits)
+
+								if (format[0] == 'g') // ISO 8601 year (two digits)
+								{
+									isoYear = isoYear.Substring(isoYear.Length - 2, 2);
+								}
+								pt = strftime_add(isoYear, pt, ptlim);
+							}
+
+							continue;
+
+						case 'W': // Week number with the first Monday as the first day of week one (00-53)
+							//pt = _conv((t->tm_yday + 7 - (t->tm_wday ? (t->tm_wday - 1) : 6)) / 7, "%02d", pt, ptlim);
+							pt = strftime_add(System.Globalization.CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(t, System.Globalization.CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday).ToString(), pt, ptlim);
+							continue;
+
+						case 'w': // Weekday as a decimal number with Sunday as 0 (0-6)
+							//pt = _conv(t->tm_wday, "%d", pt, ptlim);
+							pt = strftime_add(((int)t.DayOfWeek).ToString(), pt, ptlim);
+							continue;
+
+						case 'X': // Long time representation (locale dependent)
+							//pt = _fmt("%H:%M:%S", t, pt, ptlim); // fails to comply with spec!
+							pt = strftime_add(t.ToString("%T"), pt, ptlim);
+							continue;
+
+						case 'x': // Short date representation (locale dependent)
+							//pt = _fmt("%m/%d/%y", t, pt, ptlim); // fails to comply with spec!
+							pt = strftime_add(t.ToString("%d"), pt, ptlim);
+							continue;
+
+						case 'y': // Last two digits of year (00-99)
+							//pt = _conv((t->tm_year + TM_YEAR_BASE) % 100, "%02d", pt, ptlim);
+							pt = strftime_add(t.ToString("yy"), pt, ptlim);
+							continue;
+
+						case 'Y': // Full year (all digits)
+							//pt = _conv(t->tm_year + TM_YEAR_BASE, "%04d", pt, ptlim);
+							pt = strftime_add(t.Year.ToString(), pt, ptlim);
+							continue;
+
+						case 'Z': // Timezone name or abbreviation (locale dependent) or nothing if unavailable (e.g. CDT)
+							pt = strftime_add(TimeZoneInfo.Local.StandardName, pt, ptlim);
+							continue;
+
+						case 'z': // ISO 8601 offset from UTC in timezone (+/-hhmm), or nothing if unavailable
+							TimeSpan ts = TimeZoneInfo.Local.GetUtcOffset(t);
+							string offset = (ts.Ticks < 0 ? "-" : "+") + ts.TotalHours.ToString("#00") + ts.Minutes.ToString("00");
+							pt = strftime_add(offset, pt, ptlim);
+							continue;
+
+						case '%': // Add '%'
+							pt = strftime_add("%", pt, ptlim);
+							continue;
+
+						default:
+							break;
+					}
+				}
+
+				if (pt == ptlim) break;
+
+				pt[0] = format[0];
+				pt.inc();
+			}
+
+			return pt;
+		}
+
+		private static CharPtr strftime_add(CharPtr str, CharPtr pt, CharPtr ptlim)
+		{
+			pt[0] = str[0];
+			str = str.next();
+
+			while (pt < ptlim && pt[0] != 0)
+			{
+				pt.inc();
+
+				pt[0] = str[0];
+				str = str.next();
+			}
+			return pt;
+		} 
+		#endregion
 
 		private static int os_time (lua_State L) {
 		  DateTime t;
