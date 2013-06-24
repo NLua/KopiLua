@@ -24,7 +24,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\Bin\Debug</OutputPath>
-    <DefineConstants>TRACE;DEBUG;LUA_CORE;_WIN32;LUA_COMPAT_VARARG;LUA_COMPAT_MOD;LUA_COMPAT_GFIND;CATCH_EXCEPTIONS;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;LUA_CORE;CATCH_EXCEPTIONS;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -34,7 +34,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\Bin\Release</OutputPath>
-    <DefineConstants>TRACE;LUA_CORE;_WIN32;LUA_COMPAT_VARARG;LUA_COMPAT_MOD;LUA_COMPAT_GFIND;CATCH_EXCEPTIONS;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;LUA_CORE;LUA_COMPAT_VARARG;LUA_COMPAT_MOD;LUA_COMPAT_GFIND;CATCH_EXCEPTIONS;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo_KopiLua_wp7.cs" />
+    <Compile Include="src\CharPtr.cs" />
     <Compile Include="src\lapi.cs" />
     <Compile Include="src\lauxlib.cs" />
     <Compile Include="src\lbaselib.cs" />
@@ -80,7 +81,10 @@
     <Compile Include="src\ltm.cs" />
     <Compile Include="src\lua.cs" />
     <Compile Include="src\luaconf.cs" />
+    <Compile Include="src\LuaDebug.cs" />
     <Compile Include="src\lualib.cs" />
+    <Compile Include="src\LuaState.cs" />
+    <Compile Include="src\LuaTag.cs" />
     <Compile Include="src\lundump.cs" />
     <Compile Include="src\lvm.cs" />
     <Compile Include="src\lzio.cs" />
