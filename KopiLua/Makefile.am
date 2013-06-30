@@ -5,7 +5,7 @@ EXTRA_DIST =
 
 if ENABLE_DEBUG
 ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:TRACE;DEBUG;LUA_CORE;_WIN32;LUA_COMPAT_VARARG;LUA_COMPAT_MOD;LUA_COMPAT_GFIND;CATCH_EXCEPTIONS"
+ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:TRACE;DEBUG;LUA_CORE;CATCH_EXCEPTIONS"
 ASSEMBLY = ../Bin/Debug/KopiLua.dll
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = library
@@ -19,7 +19,7 @@ endif
 
 if ENABLE_RELEASE
 ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize+ "-define:TRACE;LUA_CORE;_WIN32;LUA_COMPAT_VARARG;LUA_COMPAT_MOD;LUA_COMPAT_GFIND;CATCH_EXCEPTIONS"
+ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize+ "-define:TRACE;LUA_CORE;CATCH_EXCEPTIONS"
 ASSEMBLY = ../Bin/Release/KopiLua.dll
 ASSEMBLY_MDB = 
 COMPILE_TARGET = library
@@ -81,7 +81,11 @@ FILES = \
 	src/lzio.cs \
 	src/print.cs \
 	src/printf/Tools.cs \
-	src/lnet.cs 
+	src/lnet.cs \
+	src/CharPtr.cs \
+	src/LuaState.cs \
+	src/LuaDebug.cs \
+	src/LuaTag.cs 
 
 DATA_FILES = 
 

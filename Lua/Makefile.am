@@ -5,7 +5,7 @@ EXTRA_DIST =
 
 if ENABLE_DEBUG
 ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:TRACE;DEBUG;LUA_CORE;_WIN32;LUA_COMPAT_VARARG;LUA_COMPAT_MOD;LUA_COMPAT_GFIND;CATCH_EXCEPTIONS"
+ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:TRACE;DEBUG;LUA_CORE;CATCH_EXCEPTIONS"
 ASSEMBLY = ../Bin/Debug/Lua.exe
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = exe
@@ -19,7 +19,7 @@ endif
 
 if ENABLE_RELEASE
 ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize+ "-define:TRACE;LUA_CORE;_WIN32;LUA_COMPAT_VARARG;LUA_COMPAT_MOD;LUA_COMPAT_GFIND;CATCH_EXCEPTIONS"
+ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize+ "-define:TRACE;LUA_CORE;CATCH_EXCEPTIONS"
 ASSEMBLY = ../Bin/Release/Lua.exe
 ASSEMBLY_MDB = 
 COMPILE_TARGET = exe
@@ -81,7 +81,12 @@ FILES = \
 	../KopiLua/src/lvm.cs \
 	../KopiLua/src/lzio.cs \
 	../KopiLua/src/print.cs \
-	../KopiLua/src/printf/Tools.cs 
+	../KopiLua/src/printf/Tools.cs \
+	../KopiLua/src/lnet.cs \
+	../KopiLua/src/CharPtr.cs \
+	../KopiLua/src/LuaState.cs \
+	../KopiLua/src/LuaDebug.cs \
+	../KopiLua/src/LuaTag.cs 
 
 DATA_FILES = 
 
