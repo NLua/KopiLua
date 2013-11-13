@@ -254,8 +254,8 @@ namespace KopiLua
 		  LuaPushNumber(L, HUGE_VAL);
 		  LuaSetField(L, -2, "huge");
 		#if LUA_COMPAT_MOD
-		  lua_getfield(L, -1, "fmod");
-		  lua_setfield(L, -2, "mod");
+		  LuaGetField(L, -1, "fmod");
+		  LuaSetField(L, -2, "mod");
 		#endif
 		  return 1;
 		}
