@@ -1311,6 +1311,11 @@ namespace KopiLua
 						filemode = FileMode.Create;
 						fileaccess = fileaccess | FileAccess.Write;
 						break;
+						
+					case 'a':
+						filemode = FileMode.Append;
+						fileaccess = fileaccess | FileAccess.Write;
+						break;						
 				}
 			try
 			{
