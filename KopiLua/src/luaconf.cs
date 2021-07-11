@@ -1359,7 +1359,15 @@ namespace KopiLua
 
 		public static int fscanf(Stream f, CharPtr format, params object[] argp)
 		{
-			string str = Console.ReadLine();
+			StringBuilder sb = new StringBuilder();
+			for (;;)
+			{
+				int c = f.ReadByte();
+				if (c == -1) break;
+				if (c == '\n') break; //we should be transforming \r\n to \n before we get here, but that isn't done
+				sb.Append((char)c);
+			}
+			string str = sb.ToString();
 			return parse_scanf(str, format, argp);
 		}
 		
